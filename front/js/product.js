@@ -53,6 +53,16 @@ document.getElementById("addToCart").addEventListener("click", function () {
     alert(`Veuillez sélectionner la quantité d'unités souhaitée.`);
     return false;
   }
+  if (quantity < 1) {
+    alert("La quantité minimum de produits est de 1 unité");
+    document.getElementById("quantity").style.background = "red";
+    document.getElementById("quantity").style.color = "white";
+    return false;
+  } else {
+    document.getElementById("quantity").style.background = "white";
+    document.getElementById("quantity").style.color =
+      "var(--footer-secondary-color)";
+  }
   if (window.localStorage.getItem("cart")) {
     let localStorageCart = window.localStorage.getItem("cart");
     let cart = JSON.parse(localStorageCart);
@@ -73,6 +83,9 @@ document.getElementById("addToCart").addEventListener("click", function () {
       cart.push(product);
     }
     window.localStorage.setItem("cart", JSON.stringify(cart));
+    document.getElementById("addToCart").textContent = `
+    Produit(s) ajouté(s) à votre panier
+    `;
   } else {
     let cart = [];
     cart.push(product);
