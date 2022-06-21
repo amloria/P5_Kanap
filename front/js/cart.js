@@ -145,7 +145,7 @@ function totalCartPrice() {
 let order = document.getElementById("order");
 
 let regexName = /^[A-Za-z -]+$/;
-let regexAddress = /^[A-Za-z0-9]+$/;
+let regexAddress = /^[0-9\sA-Za-z,']+$/;
 let regexEmail = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;
 
 order.addEventListener("click", orderFormValidation);
@@ -161,20 +161,63 @@ function orderFormValidation(event) {
 
   let validInput = false;
   if (!regexName.test(userFirstName)) {
-    alert("stop");
+    document.getElementById("firstNameErrorMsg").textContent =
+      "Prénom invalide";
+    document.getElementById("firstNameErrorMsg").style.color = "#ECB7C3";
     validInput = false;
+  } else {
+    document.getElementById("firstNameErrorMsg").textContent = "Prénom valide";
+    document.getElementById("firstNameErrorMsg").style.color = "#41FD32";
+    validInput = true;
   }
   if (!regexName.test(userLastName)) {
+    document.getElementById("lastNameErrorMsg").textContent = "Nom invalide";
+    document.getElementById("lastNameErrorMsg").style.color = "#ECB7C3";
     validInput = false;
+  } else {
+    document.getElementById("lastNameErrorMsg").textContent = "Nom valide";
+    document.getElementById("lastNameErrorMsg").style.color = "#41FD32";
+    validInput = true;
   }
   if (!regexAddress.test(userAddress)) {
+    document.getElementById("addressErrorMsg").textContent = "Adresse invalide";
+    document.getElementById("addressErrorMsg").style.color = "#ECB7C3";
     validInput = false;
+  } else {
+    document.getElementById("addressErrorMsg").textContent = "Adresse valide";
+    document.getElementById("addressErrorMsg").style.color = "#41FD32";
+    validInput = true;
   }
   if (!regexName.test(userCity)) {
+    document.getElementById("cityErrorMsg").textContent = "Ville invalide";
+    document.getElementById("cityErrorMsg").style.color = "#ECB7C3";
     validInput = false;
+  } else {
+    document.getElementById("cityErrorMsg").textContent = "Ville valide";
+    document.getElementById("cityErrorMsg").style.color = "#41FD32";
+    validInput = true;
   }
   if (!regexEmail.test(userEmail)) {
+    document.getElementById("emailErrorMsg").textContent =
+      "Adresse email invalide";
+    document.getElementById("emailErrorMsg").style.color = "#ECB7C3";
     validInput = false;
+  } else {
+    document.getElementById("emailErrorMsg").textContent =
+      "Adresse email valide";
+    document.getElementById("emailErrorMsg").style.color = "#41FD32";
+    validInput = true;
+  }
+  if (
+    !regexName.test(userFirstName) ||
+    !regexName.test(userLastName) ||
+    !regexAddress.test(userAddress) ||
+    !regexName.test(userCity) ||
+    !regexEmail.test(userEmail)
+  ) {
+    document.getElementById("order").value =
+      "Veuillez corriger les champs marqués en rouge et réessayer";
+    return false;
   }
 
   let contact = {
@@ -184,34 +227,35 @@ function orderFormValidation(event) {
     city: userCity,
     email: userEmail,
   };
+  document.getElementById("order").value =
+    "Toute l'équipe KANAP vous remercie pour votre commande !";
 
-  console.log(contact);
-
-  let productsInCartIds = [];
+  let productsIdInCart = [];
 
   for (let item of cart) {
-    productsInCartIds.push(item.id);
+    productsIdInCart.push(item.id);
   }
 
-  //   fetch("http://localhost:3000/api/products/order", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       contact: contact,
-  //       products: productsId,
-  //     }),
-  //   })
-  //     .then(function (apiData) {
-  //       if (apiData.ok) {
-  //         return apiData.json();
-  //       }
-  //     })
-  //     .then(function (response) {
-  //       console.log(response);
-  //     })
-  //     .catch(function (err) {
-  //       console.error(`Retour du serveur : ${err}`); // Une erreur est survenue
-  //     });
+  fetch("http://localhost:3000/api/products/order", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      contact: contact,
+      products: productsIdInCart,
+    }),
+  })
+    .then(function (apiData) {
+      if (apiData.ok) {
+        return apiData.json();
+      }
+    })
+    .then(function (response) {
+      let orderId = response.orderId;
+      document.location.replace(`./confirmation.html?orderId=${orderId}`);
+    })
+    .catch(function (err) {
+      console.error(`Retour du serveur : ${err}`); // Une erreur est survenue
+    });
 }
