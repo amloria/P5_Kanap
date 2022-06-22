@@ -159,7 +159,7 @@ function orderFormValidation(event) {
   let userCity = document.getElementById("city").value.trim();
   let userEmail = document.getElementById("email").value.trim();
 
-  let validInput = false;
+  let validInput = true;
   if (!regexName.test(userFirstName)) {
     document.getElementById("firstNameErrorMsg").textContent =
       "Prénom invalide";
@@ -168,7 +168,6 @@ function orderFormValidation(event) {
   } else {
     document.getElementById("firstNameErrorMsg").textContent = "Prénom valide";
     document.getElementById("firstNameErrorMsg").style.color = "#41FD32";
-    validInput = true;
   }
   if (!regexName.test(userLastName)) {
     document.getElementById("lastNameErrorMsg").textContent = "Nom invalide";
@@ -177,7 +176,6 @@ function orderFormValidation(event) {
   } else {
     document.getElementById("lastNameErrorMsg").textContent = "Nom valide";
     document.getElementById("lastNameErrorMsg").style.color = "#41FD32";
-    validInput = true;
   }
   if (!regexAddress.test(userAddress)) {
     document.getElementById("addressErrorMsg").textContent = "Adresse invalide";
@@ -186,7 +184,6 @@ function orderFormValidation(event) {
   } else {
     document.getElementById("addressErrorMsg").textContent = "Adresse valide";
     document.getElementById("addressErrorMsg").style.color = "#41FD32";
-    validInput = true;
   }
   if (!regexName.test(userCity)) {
     document.getElementById("cityErrorMsg").textContent = "Ville invalide";
@@ -195,7 +192,6 @@ function orderFormValidation(event) {
   } else {
     document.getElementById("cityErrorMsg").textContent = "Ville valide";
     document.getElementById("cityErrorMsg").style.color = "#41FD32";
-    validInput = true;
   }
   if (!regexEmail.test(userEmail)) {
     document.getElementById("emailErrorMsg").textContent =
@@ -206,15 +202,8 @@ function orderFormValidation(event) {
     document.getElementById("emailErrorMsg").textContent =
       "Adresse email valide";
     document.getElementById("emailErrorMsg").style.color = "#41FD32";
-    validInput = true;
   }
-  if (
-    !regexName.test(userFirstName) ||
-    !regexName.test(userLastName) ||
-    !regexAddress.test(userAddress) ||
-    !regexName.test(userCity) ||
-    !regexEmail.test(userEmail)
-  ) {
+  if (validInput === false) {
     document.getElementById("order").value =
       "Veuillez corriger les champs marqués en rouge et réessayer";
     return false;
@@ -227,6 +216,7 @@ function orderFormValidation(event) {
     city: userCity,
     email: userEmail,
   };
+
   document.getElementById("order").value =
     "Toute l'équipe KANAP vous remercie pour votre commande !";
 
@@ -253,7 +243,9 @@ function orderFormValidation(event) {
     })
     .then(function (response) {
       let orderId = response.orderId;
-      document.location.replace(`./confirmation.html?orderId=${orderId}`);
+      setTimeout(() => {
+        document.location.replace(`./confirmation.html?orderId=${orderId}`);
+      }, 1500);
     })
     .catch(function (err) {
       console.error(`Retour du serveur : ${err}`); // Une erreur est survenue

@@ -3,3 +3,7 @@ let url = new URL(str);
 let orderId = url.searchParams.get("orderId");
 
 document.getElementById("orderId").textContent = `${orderId}`;
+
+// Fin de la commande
+
+localStorage.clear();

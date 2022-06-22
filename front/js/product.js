@@ -13,13 +13,13 @@ fetch(`http://localhost:3000/api/products/${productId}`)
     <img src="${productDetails.imageUrl}" alt="${productDetails.altTxt}">`;
 
     document.getElementById("title").innerHTML = `
-    <h1 id="title">${productDetails.name}</h1>`;
+    ${productDetails.name}`;
 
     document.getElementById("price").innerHTML = `
-    <span id="price">${productDetails.price}</span>`;
+    ${productDetails.price}`;
 
     document.getElementById("description").innerHTML = `
-    <p id="description">${productDetails.description}</p>`;
+    ${productDetails.description}`;
 
     let colors = productDetails.colors;
     let select = document.getElementById("colors");
