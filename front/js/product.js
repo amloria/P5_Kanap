@@ -1,25 +1,29 @@
+/* Product page */
+
 let str = window.location.href;
 let url = new URL(str);
 let productId = url.searchParams.get("id");
 
+// Getting only one product by its ID from API
 fetch(`http://localhost:3000/api/products/${productId}`)
+  // If data is ok return data in json format
   .then(function (productData) {
     if (productData.ok) {
       return productData.json();
     }
   })
+  // Display product details and colors options on the product page
   .then(function (productDetails) {
     document.getElementsByClassName("item__img")[0].innerHTML = `
     <img src="${productDetails.imageUrl}" alt="${productDetails.altTxt}">`;
 
-    document.getElementById("title").innerHTML = `
-    ${productDetails.name}`;
+    document.getElementById("title").innerHTML = `${productDetails.name}`;
 
-    document.getElementById("price").innerHTML = `
-    ${productDetails.price}`;
+    document.getElementById("price").innerHTML = `${productDetails.price}`;
 
-    document.getElementById("description").innerHTML = `
-    ${productDetails.description}`;
+    document.getElementById(
+      "description"
+    ).innerHTML = `${productDetails.description}`;
 
     let colors = productDetails.colors;
     let select = document.getElementById("colors");
@@ -34,17 +38,22 @@ fetch(`http://localhost:3000/api/products/${productId}`)
   })
 
   .catch(function (err) {
-    console.error(`Retour du serveur : ${err}`); // Une erreur est survenue
+    console.error(`Retour du serveur : ${err}`); // Show error if necessary
   });
+
+// Listenning at the click on the "addToCart" button
+// and checking that the color and quantity have been defined
 
 document.getElementById("addToCart").addEventListener("click", function () {
   let color = document.getElementById("colors").value;
   let quantity = document.getElementById("quantity").value;
+  // Product object to save in localStorage
   let product = {
     id: productId,
     color: color,
     quantity: quantity,
   };
+  // Color option must be defined and quantity > 0 and <= 100
   if (color == "") {
     alert(`Veuillez sélectionner la couleur de votre préférence.`);
     return false;
@@ -66,11 +75,13 @@ document.getElementById("addToCart").addEventListener("click", function () {
   if (window.localStorage.getItem("cart")) {
     let localStorageCart = window.localStorage.getItem("cart");
     let cart = JSON.parse(localStorageCart);
-    let productFound = false;
+    let productFound = false; // Fuse on
     for (let item of cart) {
+      // If there is already a product with the same id and color in cart, only change quantity
       if (product.id === item.id && product.color === item.color) {
         productFound = true;
         item.quantity = parseInt(item.quantity) + parseInt(product.quantity);
+        // Max quantity = 100 units per item
         if (item.quantity > 100) {
           item.quantity = 100;
           alert(
@@ -82,11 +93,15 @@ document.getElementById("addToCart").addEventListener("click", function () {
     if (productFound === false) {
       cart.push(product);
     }
+    // Save product object in localStorage
     window.localStorage.setItem("cart", JSON.stringify(cart));
+    // Inform customer that the selected item has been added to cart
     document.getElementById("addToCart").textContent = `
     Produit(s) ajouté(s) à votre panier
     `;
   } else {
+    // In the case it is the first product to add to cart,
+    // create an empty array and push the product inside
     let cart = [];
     cart.push(product);
     window.localStorage.setItem("cart", JSON.stringify(cart));

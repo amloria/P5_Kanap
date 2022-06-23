@@ -1,4 +1,8 @@
+/* Home page */
+
+// Getting data from API
 fetch("http://localhost:3000/api/products")
+  // If data is ok return data in json format
   .then(function (apiData) {
     if (apiData.ok) {
       return apiData.json();
@@ -6,6 +10,7 @@ fetch("http://localhost:3000/api/products")
   })
   .then(function (products) {
     let itemsSection = document.getElementById("items");
+    // Find and display products and their details on the homepage
     for (let product of products) {
       itemsSection.insertAdjacentHTML(
         "beforeend",
@@ -20,5 +25,5 @@ fetch("http://localhost:3000/api/products")
     }
   })
   .catch(function (err) {
-    console.error(`Retour du serveur : ${err}`); // Une erreur est survenue
+    console.error(`Retour du serveur : ${err}`); // Show error if necessary
   });

@@ -1,7 +1,11 @@
+/* Cart page */
+
 let localStorageCart = window.localStorage.getItem("cart");
 let cart = JSON.parse(localStorageCart);
 let totalQuantity = 0;
 let totalPrice = 0;
+
+// Another way to get the same result as below
 
 // for (let item of cart) {
 //   fetch(`http://localhost:3000/api/products/${item.id}`)
@@ -15,7 +19,9 @@ let totalPrice = 0;
 //   })
 // }
 
+// Getting data from API
 fetch("http://localhost:3000/api/products")
+  // If data is ok return data in json format
   .then(function (apiData) {
     if (apiData.ok) {
       return apiData.json();
@@ -24,6 +30,7 @@ fetch("http://localhost:3000/api/products")
   .then(function (products) {
     let itemsSection = document.getElementById("cart__items");
     for (let item of cart) {
+      // Getting data from API for displaying the products in cart
       const product = products.find((element) => element._id == item.id);
       if (item.id == product._id) {
         itemsSection.insertAdjacentHTML(
@@ -60,6 +67,7 @@ fetch("http://localhost:3000/api/products")
     totalCartQuantity();
     totalCartPrice();
   })
+  // Changing the quantity of a product
   .then(function () {
     let itemQuantity = document.getElementsByClassName("itemQuantity");
     for (let item of itemQuantity) {
@@ -70,8 +78,18 @@ fetch("http://localhost:3000/api/products")
         let productToChangeQuantity = cart.find(
           (element) => element.id == id && element.color == color
         );
+        // Quantity must be > than 0
         if (quantity < 1) {
           alert("La quantité minimum de produits est de 1 unité");
+          item.closest("input").style.background = "red";
+          item.closest("input").style.color = "white";
+          return false;
+        }
+        // Max quantity = 100 units per item
+        if (quantity > 100) {
+          alert(
+            `Il n'est possible de commander que 100 unités à la fois. Veuillez entrer un numéro de quantité inférieur à 100 unités.`
+          );
           item.closest("input").style.background = "red";
           item.closest("input").style.color = "white";
           return false;
@@ -81,13 +99,16 @@ fetch("http://localhost:3000/api/products")
           productToChangeQuantity.quantity = quantity;
           window.localStorage.setItem("cart", JSON.stringify(cart));
         }
+        // Getting the product concerned by its ID from the API to update price
         fetch(`http://localhost:3000/api/products/${id}`)
+          // If data is ok return data in json format
           .then(function (apiData) {
             if (apiData.ok) {
               return apiData.json();
             }
           })
           .then(function (product) {
+            // Update price
             item.closest("article").querySelector("p.price").innerHTML = `
             ${quantity * product.price} €
             `;
@@ -97,9 +118,11 @@ fetch("http://localhost:3000/api/products")
       });
     }
   })
+  // Deleting a product from the cart
   .then(function () {
     let deleteButtons = document.getElementsByClassName("deleteItem");
     for (let deleteButton of deleteButtons) {
+      // Find the item to delete by listening for the click in the delete button
       deleteButton.addEventListener("click", function () {
         let productId = deleteButton.closest("article").getAttribute("data-id");
         let productColor = deleteButton
@@ -118,9 +141,10 @@ fetch("http://localhost:3000/api/products")
     }
   })
   .catch(function (err) {
-    console.error(`Retour du serveur : ${err}`); // Une erreur est survenue
+    console.error(`Retour du serveur : ${err}`); // Show error if necessary
   });
 
+// Show total cart quantity
 function totalCartQuantity() {
   totalQuantity = 0;
   for (let item of document.getElementsByClassName("itemQuantity")) {
@@ -130,6 +154,8 @@ function totalCartQuantity() {
         <span id="totalQuantity">${totalQuantity}</span>
     `;
 }
+
+// Show total cart price
 function totalCartPrice() {
   totalPrice = 0;
   for (let item of document.getElementsByClassName("price")) {
@@ -151,7 +177,7 @@ let regexEmail = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;
 order.addEventListener("click", orderFormValidation);
 
 function orderFormValidation(event) {
-  event.preventDefault(); // Eviter que le bouton adopte son comportement par defaut
+  event.preventDefault(); // Prevent the button from adopting its default behavior
 
   let userFirstName = document.getElementById("firstName").value.trim();
   let userLastName = document.getElementById("lastName").value.trim();
@@ -159,7 +185,9 @@ function orderFormValidation(event) {
   let userCity = document.getElementById("city").value.trim();
   let userEmail = document.getElementById("email").value.trim();
 
-  let validInput = true;
+  let validInput = true; // Fuse on
+
+  // Checking all user input and displaying error messages if needed
   if (!regexName.test(userFirstName)) {
     document.getElementById("firstNameErrorMsg").textContent =
       "Prénom invalide";
@@ -209,6 +237,7 @@ function orderFormValidation(event) {
     return false;
   }
 
+  // Contact object to send to the backend
   let contact = {
     firstName: userFirstName,
     lastName: userLastName,
@@ -217,15 +246,17 @@ function orderFormValidation(event) {
     email: userEmail,
   };
 
+  // Thanks message when confirming the order
   document.getElementById("order").value =
     "Toute l'équipe KANAP vous remercie pour votre commande !";
 
+  // Creating an array of all the products id in cart
   let productsIdInCart = [];
-
   for (let item of cart) {
     productsIdInCart.push(item.id);
   }
 
+  // Posting data in the API
   fetch("http://localhost:3000/api/products/order", {
     method: "POST",
     headers: {
@@ -236,6 +267,7 @@ function orderFormValidation(event) {
       products: productsIdInCart,
     }),
   })
+    // If data is ok return data in json format
     .then(function (apiData) {
       if (apiData.ok) {
         return apiData.json();
@@ -243,11 +275,12 @@ function orderFormValidation(event) {
     })
     .then(function (response) {
       let orderId = response.orderId;
+      // Display thanks message for 1500ms and redirect customer to confirmation page
       setTimeout(() => {
         document.location.replace(`./confirmation.html?orderId=${orderId}`);
       }, 1500);
     })
     .catch(function (err) {
-      console.error(`Retour du serveur : ${err}`); // Une erreur est survenue
+      console.error(`Retour du serveur : ${err}`); // Show error if necessary
     });
 }
