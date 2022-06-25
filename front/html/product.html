@@ -6,6 +6,7 @@
     <meta charset="utf-8">
     <meta name="description" content="Plateforme incroyable de e-commerce">
 
+    <link rel="icon" type="image/webp" href="/front/images/logo.webp">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -33,8 +34,8 @@
           </a>
           <nav>
             <ul>
-              <a href="./index.html"><li>Accueil</li></a>
-              <a href="./cart.html"><li>Panier</li></a>
+              <li><a href="./index.html">Accueil</a></li>
+              <li><a href="./cart.html">Panier</a></li>
             </ul>
           </nav>
         </div>
@@ -44,7 +45,7 @@
 
     <main class="limitedWidthBlockContainer">
       <div class="limitedWidthBlock">
-        <section class="item">
+        <div class="item">
           <article>
             <div class="item__img">
               <!-- <img src="../images/logo.png" alt="Photographie d'un canapé"> -->
@@ -52,7 +53,7 @@
             <div class="item__content">
 
               <div class="item__content__titlePrice">
-                <h1 id="title"><!-- Nom du produit --></h1>
+                <h1>Nom du produit</h1>
                 <p>Prix : <span id="price"><!-- 42 --></span>€</p>
               </div>
 
@@ -63,7 +64,7 @@
 
               <div class="item__content__settings">
                 <div class="item__content__settings__color">
-                  <label for="color-select">Choisir une couleur :</label>
+                  <label for="colors">Choisir une couleur :</label>
                   <select name="color-select" id="colors">
                       <option value="">--SVP, choisissez une couleur --</option>
 <!--                       <option value="vert">vert</option>
@@ -72,7 +73,7 @@
                 </div>
 
                 <div class="item__content__settings__quantity">
-                  <label for="itemQuantity">Nombre d'article(s) (1-100) :</label>
+                  <label for="quantity">Nombre d'article(s) (1-100) :</label>
                   <input type="number" name="itemQuantity" min="1" max="100" value="0" id="quantity">
                 </div>
               </div>
@@ -83,7 +84,7 @@
 
             </div>
           </article>
-        </section>
+        </div>
       </div>
     </main>
     
@@ -100,13 +101,13 @@
             <p>Téléphone : 01 23 45 67 89</p>
           </div>
           <div>
-            <p>Email : support@name.com</p>
+            <a href="mailto:support@name.com">Email : support@name.com</a>
           </div>
         </div>
       </div>
       <div class="limitedWidthBlockContainer footerSecondary">
         <div class="limitedWidthBlock">
-          <p>© Copyright 2021 - 2042 | Openclassrooms by Openclassrooms | All Rights Reserved | Powered by <3</p>
+          <p>© Copyright 2021 - 2042 | Openclassrooms by Openclassrooms | All Rights Reserved | Powered by ❤</p>
         </div>
       </div>
     </footer>

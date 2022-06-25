@@ -17,7 +17,9 @@ fetch(`http://localhost:3000/api/products/${productId}`)
     document.getElementsByClassName("item__img")[0].innerHTML = `
     <img src="${productDetails.imageUrl}" alt="${productDetails.altTxt}">`;
 
-    document.getElementById("title").innerHTML = `${productDetails.name}`;
+    document.querySelector("title").innerHTML = `${productDetails.name}`;
+
+    document.querySelector("h1").innerHTML = `${productDetails.name}`;
 
     document.getElementById("price").innerHTML = `${productDetails.price}`;
 
