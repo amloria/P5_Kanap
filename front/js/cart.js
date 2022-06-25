@@ -51,9 +51,13 @@ fetch("http://localhost:3000/api/products")
                     <div class="cart__item__content__settings">
                         <div class="cart__item__content__settings__quantity">
                             <p>Qté : </p>
-                            <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${
-                              item.quantity
-                            }">
+                            <input
+                            type="number"
+                            class="itemQuantity"
+                            name="itemQuantity"
+                            min="1"
+                            max="100"
+                            value="${item.quantity}">
                         </div>
                         <div class="cart__item__content__settings__delete">
                             <p class="deleteItem">Supprimer</p>
@@ -88,7 +92,8 @@ fetch("http://localhost:3000/api/products")
         // Max quantity = 100 units per item
         if (quantity > 100) {
           alert(
-            `Il n'est possible de commander que 100 unités à la fois. Veuillez entrer un numéro de quantité inférieur à 100 unités.`
+            `Il n'est possible de commander que 100 unités à la fois.
+Veuillez entrer un numéro de quantité inférieur à 100 unités.`
           );
           item.closest("input").style.background = "red";
           item.closest("input").style.color = "white";
@@ -170,14 +175,15 @@ function totalCartPrice() {
 
 let order = document.getElementById("order");
 
-let regexName = /^[A-Za-z -]+$/;
+let regexName = /^[A-Za-z\-]+$/;
 let regexAddress = /^[0-9\sA-Za-z,']+$/;
 let regexEmail = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;
 
 order.addEventListener("click", orderFormValidation);
 
 function orderFormValidation(event) {
-  event.preventDefault(); // Prevent the button from adopting its default behavior
+  // Prevent the button from adopting its default behavior
+  event.preventDefault();
 
   let userFirstName = document.getElementById("firstName").value.trim();
   let userLastName = document.getElementById("lastName").value.trim();
@@ -275,7 +281,8 @@ function orderFormValidation(event) {
     })
     .then(function (response) {
       let orderId = response.orderId;
-      // Display thanks message for 1500ms and redirect customer to confirmation page
+      // Display thanks message for 1500ms
+      // and redirect customer to confirmation page
       setTimeout(() => {
         document.location.replace(`./confirmation.html?orderId=${orderId}`);
       }, 1500);

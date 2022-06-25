@@ -12,7 +12,7 @@ fetch(`http://localhost:3000/api/products/${productId}`)
       return productData.json();
     }
   })
-  // Display product details and colors options on the product page
+  // Display product details
   .then(function (productDetails) {
     document.getElementsByClassName("item__img")[0].innerHTML = `
     <img src="${productDetails.imageUrl}" alt="${productDetails.altTxt}">`;
@@ -27,12 +27,11 @@ fetch(`http://localhost:3000/api/products/${productId}`)
 
     let colors = productDetails.colors;
     let select = document.getElementById("colors");
-    colors.forEach((color) => {
+    // Display colors options on the product page
+    colors.forEach(function (color) {
       let colorOption = document.createElement("option");
-
       colorOption.innerHTML = `${color}`;
       colorOption.value = `${color}`;
-
       select.appendChild(colorOption);
     });
   })
@@ -67,7 +66,8 @@ document.getElementById("addToCart").addEventListener("click", function () {
     document.getElementById("quantity").style.background = "red";
     document.getElementById("quantity").style.color = "white";
     return false;
-  } else {
+  }
+  if (!quantity < 1) {
     document.getElementById("quantity").style.background = "white";
     document.getElementById("quantity").style.color =
       "var(--footer-secondary-color)";
@@ -77,7 +77,8 @@ document.getElementById("addToCart").addEventListener("click", function () {
     let cart = JSON.parse(localStorageCart);
     let productFound = false; // Fuse on
     for (let item of cart) {
-      // If there is already a product with the same id and color in cart, only change quantity
+      // If there is already a product with the same id and color in cart,
+      // only change quantity
       if (product.id === item.id && product.color === item.color) {
         productFound = true;
         item.quantity = parseInt(item.quantity) + parseInt(product.quantity);
@@ -85,7 +86,9 @@ document.getElementById("addToCart").addEventListener("click", function () {
         if (item.quantity > 100) {
           item.quantity = 100;
           alert(
-            `Il n'est possible de commander que 100 unités à la fois. Nous avons fixé la quantité de votre produit souhaité à 100 unités. Vous pouvez modifier cette quantité depuis votre panier.`
+            `Il n'est possible de commander que 100 unités à la fois.
+Nous avons fixé la quantité de votre produit souhaité à 100 unités.
+Vous pouvez modifier cette quantité depuis votre panier.`
           );
         }
       }
