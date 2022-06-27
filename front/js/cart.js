@@ -193,7 +193,7 @@ function orderFormValidation(event) {
 
   let validInput = true; // Fuse on
 
-  // Checking all user input and displaying error messages if needed
+  // Checking all user inputs and displaying error messages if needed
   if (!regexName.test(userFirstName)) {
     document.getElementById("firstNameErrorMsg").textContent =
       "Prénom invalide";

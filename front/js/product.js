@@ -42,7 +42,7 @@ fetch(`http://localhost:3000/api/products/${productId}`)
     console.error(`Retour du serveur : ${err}`); // Show error if necessary
   });
 
-// Listenning at the click on the "addToCart" button
+// Listenning for the click on the "addToCart" button
 // and checking that the color and quantity have been defined
 
 document.getElementById("addToCart").addEventListener("click", function () {
@@ -54,7 +54,7 @@ document.getElementById("addToCart").addEventListener("click", function () {
     color: color,
     quantity: quantity,
   };
-  // Color option must be defined and quantity > 0 and <= 100
+  // Color option must be defined, quantity > 0 and <= 100
   if (color == "") {
     alert(`Veuillez sélectionner la couleur de votre préférence.`);
     return false;
